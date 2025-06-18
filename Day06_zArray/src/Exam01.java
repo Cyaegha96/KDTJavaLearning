@@ -19,11 +19,16 @@ public class Exam01 {
 //		System.out.println(arr[Integer.parseInt(sc.nextLine())]);
 //		System.out.println(Arrays.toString(arr));
 		
-		int[] arr = new int[] {10,20,30,40};
-		for(int i=0; i< 4;i++) {
-			System.out.println(arr[i]);
-		}
+//		int[] arr = new int[] {10,20,30,40};
+//		for(int i=0; i< 4;i++) {
+//			System.out.println(arr[i]);
+//		}
 		
+		//"Apple", "Orange", "Banana"
+		String[] fruit = {"Apple", "Orange", "Banana"};
+		for(int i=0;i<fruit.length;i++) {
+			System.out.println(fruit[i]);
+		}
 	}
 
 }
