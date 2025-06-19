@@ -1,3 +1,4 @@
+package solveTypeString;
 import java.util.Scanner;
 
 public class p9086 {

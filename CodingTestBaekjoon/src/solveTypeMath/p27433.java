@@ -1,3 +1,4 @@
+package solveTypeMath;
 import java.util.Scanner;
 
 

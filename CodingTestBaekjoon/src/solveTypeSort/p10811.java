@@ -1,3 +1,4 @@
+package solveTypeSort;
 import java.util.Scanner;
 
 public class p10811 {

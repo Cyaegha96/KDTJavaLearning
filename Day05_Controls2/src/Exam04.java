@@ -11,6 +11,5 @@ public class Exam04 {
 		System.out.println((int)(rand*8)+37);
 		//random() * (최대값-최소값+1)+ 최소값
 		
-		//가정2. 
 	}
 }

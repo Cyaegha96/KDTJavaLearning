@@ -1,3 +1,4 @@
+package solveDoing;
 import java.util.Arrays;
 import java.util.Scanner;
 
