@@ -1,6 +1,4 @@
-/**
- * 난수 생성 관련 기능을 제공하는 클래스입니다.
- */
+
 public class Quiz01 {
 	
 	public static int getSum(int[] arr) {
@@ -34,6 +32,8 @@ public class Quiz01 {
         return (int) (Math.random() * (max - min + 1) + min);        
     }
 
+  
+    
     /**
      * 프로그램 실행 진입점. 난수 생성 메서드를 호출하여 결과를 출력합니다.
      *
