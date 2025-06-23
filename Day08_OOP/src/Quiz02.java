@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import it.sauronsoftware.ftp4j.FTPAbortedException;
 import it.sauronsoftware.ftp4j.FTPClient;
@@ -10,65 +11,114 @@ import it.sauronsoftware.ftp4j.FTPFile;
 import it.sauronsoftware.ftp4j.FTPIllegalReplyException;
 import it.sauronsoftware.ftp4j.FTPListParseException;
 
-public class Quiz02 {
-
-	public static void connectingServer(String ipAddressString,FTPClient client) {
-		while(true) {
-			try {
-				client.connect(ipAddressString);
-				System.out.println("FTP Server is Connected!");
-				return;
-			} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e) {
-				System.out.println("서버 연결 실패!");
-			}
-		}
+class Server{
+	//서버 접속을 위한 정보를 담는 클래스 Server
+	
+	String ipAddressString;
+	int portNum;
+	String idString;
+	String passwordString;
+	FTPClient client;
+	boolean serverConnect =false;
+	boolean serverLogin = false;
+	
+	
+	public void setIpAddress(String ipAddressString) {
+		this.ipAddressString = ipAddressString;
 	}
+	
+	public void setPortNum(int portNum) {
+		this.portNum = portNum;
+	}
+	
+	public void setIdString(String id) {
+		this.idString = id;
+	}
+	
+	public void setPasswordString(String password) {
+		this.passwordString = password;
+	}
+	
+	Server(FTPClient client) {
+		this.client = client;
+	}
+	
+	public Server(String ipAddressString, int portNum, String idString, String passwordString) {
+		super();
+		this.ipAddressString = ipAddressString;
+		this.portNum = portNum;
+		this.idString = idString;
+		this.passwordString = passwordString;
+	}
+	
+	
+	public void connectingServer(String ipAddressString, int portNum,FTPClient client) {
+		
+			try {
+				client.connect(ipAddressString,portNum);
+				client.setPassive(true);
+				System.out.println("FTP Server is Connected!");
+				this.serverConnect = true;
+			} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e) {
+				// TODO Auto-generated catch block
+				this.serverConnect = false;
+				e.printStackTrace();			
+			}
+			
+			return;
+		
+	}
+	
+	public void loginToServer(String idString, String passwordString, FTPClient client) {
+		
 
-	public static void loginToServer(FTPClient client) {
-		Scanner sc = new Scanner(System.in);
-
-		while(true) {
-			System.out.print("input id:");
-			String idString = sc.nextLine();
-			System.out.print("input password: ");
-			String passwordString = sc.nextLine();
+			if(this.serverConnect == false) {
+				return;
+			}
 
 			try {
 				client.login(idString, passwordString);
 				System.out.println("Login Success");
+				this.serverLogin = true;
 				return;
 
 			} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e) {
-				System.out.println("로그인 실패! 아이디나 비밀번호를 확인해주세요!");
-
+				System.out.println("로그인 실패!");
+				e.printStackTrace();	
 			}
-		}
+		
 	}
 
+	void autoConnect(FTPClient client) {
 
+		connectingServer(this.ipAddressString,this.portNum, client);
+		loginToServer(this.idString,this.passwordString,client);
+	}
+}
 
+public class Quiz02 {
+
+	//static으로 선언
+	public static Scanner sc = new Scanner(System.in);
+	public static FTPClient client = new FTPClient();
+	
 	public static void uploadFile(FTPClient client) {
 		Scanner sc = new Scanner(System.in);
 		String folderPath = "C:/upload";
 
-
-		
-		
 		File folder = new File(folderPath);
-		
+
 		if (folder.exists() && folder.isDirectory()) {
 			File[] files = folder.listFiles();
 			if (files != null) {
-                for (int i=0;i<files.length;i++) {
-                    System.out.println(files[i].getName());
-                }
-            } else {
-                System.out.println("폴더가 비어있거나 접근할 수 없습니다.");
-            }
-
-		
+				for (int i=0;i<files.length;i++) {
+					System.out.println(files[i].getName());
+				}
+			} else {
+				System.out.println("폴더가 비어있거나 접근할 수 없습니다.");
+			}
 		}
-		
+
 		System.out.println("업로드할 파일명을 입력하세요");
 		System.out.print(">>>");
 		String fileNameString = sc.nextLine();
@@ -86,8 +136,6 @@ public class Quiz02 {
 	}
 
 	public static void downloadFile(FTPClient client) {
-
-		Scanner sc = new Scanner(System.in);
 
 		try {
 			System.out.println("Current Directory : /");
@@ -119,22 +167,22 @@ public class Quiz02 {
 		}
 	}
 
-	public static boolean disconnectServer(FTPClient client,boolean serverLogin) {
+	public static boolean disconnectServer(FTPClient client) {
 		try {
 			client.disconnect(true);
 			System.out.println("===서버 연결이 종료되었습니다.===");
-			serverLogin = false;
+			return false;
 
 		} catch (IllegalStateException | IOException | FTPIllegalReplyException | FTPException e) {
 			System.out.println("서버 연결을 끊는 도중에 오류가 발생했습니다.");
-
+			return true;
 		}
-		return serverLogin;
+		
 	}
 
 	public static void deleteFile(FTPClient client) {
 
-		Scanner sc = new Scanner(System.in);
+
 
 		try {
 			System.out.println("Current Directory : /");
@@ -162,13 +210,52 @@ public class Quiz02 {
 	}
 
 
+	public static void serverLogic(Server server) {
+		
+		if(server.serverConnect==false) {
+			System.out.println("===Connect Failed====");
+		}
+		if(server.serverLogin == false) {
+			System.out.println("===Login Failed====");
+			return;
+		}
+		
+		
+		while(server.serverLogin & server.serverConnect  ) { //서버 로그인인 상태에만 
+			System.out.println("1. Upload File");
+			System.out.println("2. Download File");
+			System.out.println("3. Delete File");
+			System.out.println("4. Disconnect FTP Server");
+
+			int serverSelect = select();
+			if(serverSelect == 1) {
+				uploadFile(client);
+
+			}else if(serverSelect==2) {
+
+				downloadFile(client);
+
+
+			}else if(serverSelect == 3) {
+				deleteFile(client);
+
+			}
+
+			else if(serverSelect ==4) {
+				server.serverLogin =disconnectServer(client);
+			}else {
+				System.out.println("제대로 된 번호를 선택해 주세요");
+			}
+		}
+	}
 
 	public static int select() {
 		//번호 입력 로직
 		String errorString = "제대로 된 번호를 입력해주세요.";
-		Scanner sc = new Scanner(System.in);
+
 
 		while(true) {
+			System.out.print(">>>");
 			try {
 				return Integer.parseInt(sc.nextLine());
 
@@ -177,84 +264,83 @@ public class Quiz02 {
 			}
 		}
 	}
+	
+	public static String checkIP() {
+		
+		String str="";
+		while(true) {
+			System.out.print(">>>");
+			str = sc.nextLine();
+			if(Pattern.matches("((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5])([.](?!$)|$)){4}", str)){ 
+				return str;
+			}else {
+				System.out.println("ip 주소가 아닌 문자열이 들어왔습니다.");
+			}
+		}
 
+	}
 
 	public static void main(String[] args) {
-		//Brute Forcer
-		//무차별 대입공격
-
-		Scanner sc = new Scanner(System.in);
-		boolean serverLogin = false;
 
 		while(true) {
+			
 			System.out.println("===FTP Client Program===");
 			System.out.println("1. Connect FTP server");
-			System.out.println("2. Exit Program");
-			System.out.print(">>>");
+			System.out.println("2. Connect My FTP server");
+			System.out.println("3. Exit Program");
 
 			int select = select(); //메뉴 번호는 select에 저장
 			if(select==1) {
 
 				System.out.println("input url");
-				System.out.print(">>>");
-				String ipAddressString = sc.nextLine();
+				String ipAddressString = checkIP();
 
 				System.out.println("input port");
-				System.out.print(">>>");
 
 				int port = select();
 
-				if(port == 21) { //포트 번호가 21일 때만 허용
-					System.out.println("Try to connect :"+ipAddressString+"(port : "+port+")");
 
+				System.out.println("Try to connect :"+ipAddressString+"(port : "+port+")");
 
-					FTPClient client = new FTPClient();
+				Server server = new Server(client);
 
-					connectingServer(ipAddressString,client);
-
-
-					loginToServer(client);
-					serverLogin = true;
-
-					while(serverLogin ) { //서버 로그인인 상태에만 
-						System.out.println("1. Upload File");
-						System.out.println("2. Download File");
-						System.out.println("3. Delete File");
-						System.out.println("4. Disconnect FTP Server");
-
-						int serverSelect = select();
-						if(serverSelect == 1) {
-							uploadFile(client);
-
-						}else if(serverSelect==2) {
-
-							downloadFile(client);
-
-
-						}else if(serverSelect == 3) {
-							deleteFile(client);
-
-						}
-
-						else if(serverSelect ==4) {
-							serverLogin =disconnectServer(client,serverLogin);
-						}else {
-							System.out.println("제대로 된 번호를 선택해 주세요");
-						}
+				server.connectingServer(ipAddressString, port, client);
+				
+				if(server.serverConnect==true) {
+					while(server.serverLogin==false) {
+						System.out.print("input id:");
+						String idString = sc.nextLine();
+						System.out.print("input password: ");
+						String passwordString = sc.nextLine();
+						server.loginToServer(idString, passwordString,client);
 					}
+					
+				}
 
 
-				}else {
-					System.out.println("다른 포트 번호를 선택해주세요");
-				}	
+				serverLogic(server);
 
-			}else if(select ==2) {
-				System.out.println("===FTP Client Program을 종료합니다.===");
-				System.exit(0);
-			}
+
+			}else if(select==2) {
+			//지정 포트로 자동 접속.
+
+
+				Server server = new Server("175.124.197.58", 9600, "java", "1234");
+				server.autoConnect(client);
+				System.out.println("Try to connect :"+server.ipAddressString+"(port : "+server.portNum+")");
+				
+				serverLogic(server);
+				
+				
 			
+		}else if(select ==3) {
+			System.out.println("===FTP Client Program을 종료합니다.===");
+			
+			System.exit(0);
 		}
+			
 	}
+}
 
 
 }
