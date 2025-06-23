@@ -1,11 +1,12 @@
 import java.awt.AWTException;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.nio.channels.FileChannel.MapMode;
-import java.util.EmptyStackException;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
@@ -13,6 +14,37 @@ import net.sourceforge.tess4j.Tesseract;
 
 public class AutoTajaPractice {
 	
+	public static void resizeImageByFactor(File inputFile, File outputFile, double scale) throws Exception {
+        // 원본 이미지 읽기
+        BufferedImage inputImage = ImageIO.read(inputFile);
+
+        // 원래 크기
+        int width = inputImage.getWidth();
+        int height = inputImage.getHeight();
+
+        // 새로운 크기 계산
+        int newWidth = (int)(width * scale);
+        int newHeight = (int)(height * scale);
+
+        // 리사이즈된 이미지 만들기
+        BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, inputImage.getType());
+        Graphics2D g2d = resizedImage.createGraphics();
+        g2d.drawImage(inputImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH), 0, 0, null);
+        g2d.dispose();
+
+        // 파일 포맷 추출 (확장자 기반)
+        String formatName = getFileExtension(outputFile);
+
+        // 저장
+        ImageIO.write(resizedImage, formatName, outputFile);
+    }
+
+    // 파일 확장자 추출 함수 (예: "jpg", "png")
+    private static String getFileExtension(File file) {
+        String name = file.getName();
+        int dotIndex = name.lastIndexOf('.');
+        return (dotIndex == -1) ? "jpg" : name.substring(dotIndex + 1).toLowerCase();
+    }
 	
 static Tesseract instanceTesseract = Tesseract.getInstance();
 
@@ -22,8 +54,7 @@ private static void typeCharacter(Robot robot, char c) {
         boolean upperCase = Character.isUpperCase(c);
         int keyCode = KeyEvent.getExtendedKeyCodeForChar(c);
 
-       
-
+   
         if (upperCase) {
             robot.keyPress(KeyEvent.VK_SHIFT);
         }
@@ -35,7 +66,8 @@ private static void typeCharacter(Robot robot, char c) {
         	robot.keyRelease(1);
         	robot.keyRelease(KeyEvent.VK_SHIFT);
         	
-        }else {
+        }
+        else {
         	robot.keyPress(keyCode);
             robot.keyRelease(keyCode);
         }
@@ -76,26 +108,33 @@ private static void typeCharacter(Robot robot, char c) {
 		 * @param args
 		 * @throws AWTException 
 		 * @throws InterruptedException 
+		 * @throws IOException 
 		 */
 	
-	public static void main(String[] args) throws AWTException, InterruptedException {
+	public static void main(String[] args) throws AWTException, InterruptedException, IOException {
 		
-		Rectangle captureArea = new Rectangle(650, 270, 850, 65);
+		Rectangle captureArea = new Rectangle(640, 260, 830, 45);
 		
 		instanceTesseract.setLanguage("eng");
 		instanceTesseract.setPageSegMode(7);  
+		instanceTesseract.setTessVariable("preserve_interword_spaces", "1");
 		
+
 		// Robot 인스턴스 생성
 		Robot robot = new Robot();
 		Thread.sleep(3000);
-		while(true) {
+		for(int line=0;line<10;line++) {
 			try {
 				
 				
 				BufferedImage screenFullImage = robot.createScreenCapture(captureArea);
 				
-				ImageIO.write(screenFullImage, "png", new File("screenshot.png"));
-
+				ImageIO.write(screenFullImage, "png", new File("screenshotOrigin.png"));
+				File input = new File("screenshotOrigin.png");
+	            File output = new File("screenshot.png");
+	            
+				resizeImageByFactor(input, output, 2.0);
+				
 	            System.out.println("스크린샷 저장 완료!");
 
 			} catch (Exception e) {
@@ -104,7 +143,8 @@ private static void typeCharacter(Robot robot, char c) {
 			}
 	        
 	        String typeString = process("screenshot.png");
-	  
+	        typeString.replace('‘', '\'');
+	        
 	   
 	        if (!typeString.trim().endsWith(".")) {
 	            // 마지막 영문자 위치 찾기 (a~z 또는 A~Z)
@@ -123,14 +163,16 @@ private static void typeCharacter(Robot robot, char c) {
 	                typeString = typeString.substring(0, lastLetterIndex + 1) + ".";
 	            }
 	        }
-
-
+	        
 	        System.out.println(typeString);
 	        for (char c : typeString.toCharArray()) {
 	        	
 	            typeCharacter(robot, c);
 	            Thread.sleep(20); 
 	        }
+	        robot.keyPress(KeyEvent.VK_ENTER);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+            
 	        Thread.sleep(1000);
 		}
 		

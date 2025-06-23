@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 public class ScreenshotExample {
 
 	public static void main(String[] args) {
-		Rectangle captureArea = new Rectangle(100, 100, 400, 300);
+		Rectangle captureArea = new Rectangle(640, 260, 830, 45);
 		// Robot 인스턴스 생성
         try {
 			Robot robot = new Robot();
