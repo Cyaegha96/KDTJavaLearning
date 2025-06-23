@@ -7,7 +7,6 @@ public class Exam03 {
 		String[] name = new String[3];
 		int[] korean = new int[3];
 		int[] english = new int[3];
-		
 		for (int i = 0; i <3; i++) {
 			System.out.print((i+1)+" 번째 학생 이름: ");
 			name[i] = scanner.nextLine();
