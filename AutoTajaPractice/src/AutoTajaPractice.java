@@ -9,8 +9,6 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.lang.foreign.ValueLayout.OfBoolean;
-
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -73,6 +71,58 @@ private static void typeCharacter(Robot robot, char c) {
         	robot.keyRelease(1);
         	robot.keyRelease(KeyEvent.VK_SHIFT);
         	
+        }else if(c =='@') {
+        	robot.keyPress(KeyEvent.VK_SHIFT);
+        	robot.keyPress(2);
+        	robot.keyRelease(2);
+        	robot.keyRelease(KeyEvent.VK_SHIFT);
+        	
+        }else if(c =='#') {
+        	robot.keyPress(KeyEvent.VK_SHIFT);
+        	robot.keyPress(3);
+        	robot.keyRelease(3);
+        	robot.keyRelease(KeyEvent.VK_SHIFT);
+        	
+        }else if(c =='$') {
+        	robot.keyPress(KeyEvent.VK_SHIFT);
+        	robot.keyPress(4);
+        	robot.keyRelease(4);
+        	robot.keyRelease(KeyEvent.VK_SHIFT);
+        	
+        }else if(c =='%') {
+        	robot.keyPress(KeyEvent.VK_SHIFT);
+        	robot.keyPress(5);
+        	robot.keyRelease(5);
+        	robot.keyRelease(KeyEvent.VK_SHIFT);
+        }
+        else if(c =='^') {
+        	robot.keyPress(KeyEvent.VK_SHIFT);
+        	robot.keyPress(6);
+        	robot.keyRelease(6);
+        	robot.keyRelease(KeyEvent.VK_SHIFT);
+        }
+        else if(c =='&') {
+        	robot.keyPress(KeyEvent.VK_SHIFT);
+        	robot.keyPress(7);
+        	robot.keyRelease(7);
+        	robot.keyRelease(KeyEvent.VK_SHIFT);
+        }
+        else if(c =='*') {
+        	robot.keyPress(KeyEvent.VK_SHIFT);
+        	robot.keyPress(8);
+        	robot.keyRelease(8);
+        	robot.keyRelease(KeyEvent.VK_SHIFT);
+        }
+        else if(c =='(') {
+        	robot.keyPress(KeyEvent.VK_SHIFT);
+        	robot.keyPress(9);
+        	robot.keyRelease(9);
+        	robot.keyRelease(KeyEvent.VK_SHIFT);
+        }else if(c ==')') {
+        	robot.keyPress(KeyEvent.VK_SHIFT);
+        	robot.keyPress(0);
+        	robot.keyRelease(0);
+        	robot.keyRelease(KeyEvent.VK_SHIFT);
         }
         else {
         	robot.keyPress(keyCode);
@@ -130,7 +180,7 @@ private static void typeCharacter(Robot robot, char c) {
 		 // 창 생성
         JFrame frame = new JFrame("시작/종료 버튼");
         JButton button = new JButton("프로그램 시작");
-
+        frame.move(300, 300);
         // 버튼 클릭 시 동작 정의
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -148,8 +198,7 @@ private static void typeCharacter(Robot robot, char c) {
 					}
                     for(int line=0;line<10;line++) {
             			try {
-            				
-            				
+    
             				BufferedImage screenFullImage = robot.createScreenCapture(captureArea);
             				
             				ImageIO.write(screenFullImage, "png", new File("screenshotOrigin.png"));
@@ -216,31 +265,39 @@ private static void typeCharacter(Robot robot, char c) {
                         
             	        try {
 
-							Thread.sleep(500);
-							try {
-	            				
-	            				
-	            				BufferedImage screenFullImage = robot.createScreenCapture(captureArea);
-	            				
-	            				ImageIO.write(screenFullImage, "png", new File("screenshotOrigin.png"));
-	            				File input = new File("screenshotOrigin.png");
-	            	            File output = new File("screenshot.png");
-	            	            
-	            				resizeImageByFactor(input, output, 2.0);
-	            				
-	            	            System.out.println("스크린샷2 저장 완료!");
+							
+            	        	while(true) {
+            	        		Thread.sleep(50);
+            	        		try {
+    	            				
+    	            				
+    	            				BufferedImage screenFullImage = robot.createScreenCapture(captureArea);
+    	            				
+    	            				ImageIO.write(screenFullImage, "png", new File("screenshotOrigin.png"));
+    	            				File input = new File("screenshotOrigin.png");
+    	            	            File output = new File("screenshot.png");
+    	            	            
+    	            				resizeImageByFactor(input, output, 2.0);
+    	            				
+    	            	            System.out.println("스크린샷2 저장 완료!");
 
-	            			} catch (Exception error) {
-	            				// TODO Auto-generated catch block
-	            				error.printStackTrace();
-	            			}
-	            	        
-	            	        String typeString2 = process("screenshot.png");
-	            	        if(typeString.matches(typeString2.substring(0,2))) {
-	            	        	robot.keyPress(KeyEvent.VK_ENTER);
-	                            robot.keyRelease(KeyEvent.VK_ENTER);
-	            	        }
-	            	        System.out.println("이전문장과 비교 완료!");
+    	            			} catch (Exception error) {
+    	            				// TODO Auto-generated catch block
+    	            				error.printStackTrace();
+    	            			}
+    	            	        
+    	            	        String typeString2 = process("screenshot.png");
+    	            	        if(typeString.matches(typeString2.substring(0,2))) {
+    	            	        	robot.keyPress(KeyEvent.VK_SPACE);
+    	                            robot.keyRelease(KeyEvent.VK_SPACE);
+    	            	        }else {
+    	            	        	System.out.println("이전문장과 비교 완료!");
+    	            	        	break;
+    	            	        }
+    	            	        
+    							
+            	        	}
+            	        	Thread.sleep(500);
 							
 							
 						} catch (InterruptedException e1) {

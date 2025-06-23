@@ -18,7 +18,7 @@ public class Quiz03 {
 
 		Student[] students  = new Student[3];
 		
-		for (int i = 0; i <3; i++) {
+		for (int i = 0; i <students.length; i++) {
 			String name;
 			int korean;
 			int math;
@@ -35,10 +35,15 @@ public class Quiz03 {
 			students[i] = new Student(name, korean, english, math);
 		}
 		System.out.println("이름\t국어\t수학\t영어\t합계\t평균\t");
-		for (int i = 0; i <3; i++) {
+		for (int i = 0; i <students.length; i++) {
 			int sum = (students[i].getKorean()+students[i].getMath()+students[i].getEnglish());
-			float avg = sum / 2.0f;
-			System.out.println(students[i].getName()+"\t"+students[i].getKorean()+"\t"+students[i].getMath()+"\t"+students[i].getEnglish()+"\t"+sum+"\t"+avg+"\t");
+			float avg = sum / 3.0f;
+			System.out.println(students[i].getName()+"\t"+
+								students[i].getKorean()+"\t"+
+								students[i].getMath()+"\t"+
+								students[i].getEnglish()+"\t"+
+								sum+"\t"+
+								avg+"\t");
 		}
 		
 		
