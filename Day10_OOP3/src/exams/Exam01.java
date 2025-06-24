@@ -30,5 +30,6 @@ public class Exam01 {
 		Date result2 = sdf2.parse(tmpString);
 		
 		System.out.println(result2.getTime());
+		System.out.println(sdf.format(result2.getTime()));
 	}
 }
