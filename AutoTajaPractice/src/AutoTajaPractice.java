@@ -180,6 +180,129 @@ private static void typeCharacter(Robot robot, char c) {
 		 // 창 생성
         JFrame frame = new JFrame("시작/종료 버튼");
         JButton button = new JButton("프로그램 시작");
+        Thread thread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				 
+                try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+                for(int line=0;line<10;line++) {
+        			try {
+
+        				BufferedImage screenFullImage = robot.createScreenCapture(captureArea);
+        				
+        				ImageIO.write(screenFullImage, "png", new File("screenshotOrigin.png"));
+        				File input = new File("screenshotOrigin.png");
+        	            File output = new File("screenshot.png");
+        	            
+        				resizeImageByFactor(input, output, 2.0);
+        				
+        	            System.out.println("스크린샷 저장 완료!");
+
+        			} catch (Exception error) {
+        				// TODO Auto-generated catch block
+        				error.printStackTrace();
+        			}
+        	        
+        	        String typeString = process("screenshot.png");
+        	        typeString = typeString.replace('‘', '\'').replace("ﬁ", "fi").replace("ﬂ", "fl").replace("  ", " ");
+        	        if(typeString.contains("busyr")) {
+        	        	typeString = typeString.replace("busyr", "busy");
+        	        }
+        	        if(typeString.contains("};r")) {
+        	        	typeString = typeString.replace("};r", "r");
+        	        }
+        	        	
+
+        	   
+        	        if (!typeString.trim().endsWith(".")) {
+        	            // 마지막 영문자 위치 찾기 (a~z 또는 A~Z)
+        	            int lastLetterIndex = -1;
+        	            for (int i = typeString.length() - 1; i >= 0; i--) {
+        	                char c = typeString.charAt(i);
+        	                if (Character.isLetter(c) && c < 128) { // 영문자 조건
+        	                    lastLetterIndex = i;
+        	                    break;
+        	                }
+        	            }
+
+        	            // 영문자가 있을 경우에만 처리
+        	            if (lastLetterIndex != -1) {
+        	                // 마지막 영문자까지 자르고 나머지는 버림 (공백은 유지됨)
+        	                typeString = typeString.substring(0, lastLetterIndex + 1) + ".";
+        	            }
+        	        }
+        	        
+        	        
+        	        if(typeString.equals("I U.")) {
+        	        	System.out.println("타자 끝!");
+        	        	System.exit(0);
+        	        }
+        	        
+        	        System.out.println(typeString);
+        	        for (char c : typeString.toCharArray()) {
+        	        	
+        	            typeCharacter(robot, c);
+        	            try {
+							Thread.sleep(20);
+						} catch (InterruptedException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} 
+        	        }
+        	        robot.keyPress(KeyEvent.VK_ENTER);
+                    robot.keyRelease(KeyEvent.VK_ENTER);
+                    
+        	        try {
+
+						
+        	        	while(true) {
+        	        		Thread.sleep(50);
+        	        		try {
+	            				
+	            				
+	            				BufferedImage screenFullImage = robot.createScreenCapture(captureArea);
+	            				
+	            				ImageIO.write(screenFullImage, "png", new File("screenshotOrigin.png"));
+	            				File input = new File("screenshotOrigin.png");
+	            	            File output = new File("screenshot.png");
+	            	            
+	            				resizeImageByFactor(input, output, 2.0);
+	            				
+	            	            System.out.println("스크린샷2 저장 완료!");
+
+	            			} catch (Exception error) {
+	            				// TODO Auto-generated catch block
+	            				error.printStackTrace();
+	            			}
+	            	        
+	            	        String typeString2 = process("screenshot.png");
+	            	        if(typeString.matches(typeString2.substring(0,2))) {
+	            	        	robot.keyPress(KeyEvent.VK_SPACE);
+	                            robot.keyRelease(KeyEvent.VK_SPACE);
+	            	        }else {
+	            	        	System.out.println("이전문장과 비교 완료!");
+	            	        	break;
+	            	        }
+	            	        
+							
+        	        	}
+        	        	Thread.sleep(500);
+						
+						
+					} catch (InterruptedException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+        		}
+				
+			}
+		});
         frame.move(300, 300);
         // 버튼 클릭 시 동작 정의
         button.addActionListener(new ActionListener() {
@@ -189,127 +312,14 @@ private static void typeCharacter(Robot robot, char c) {
                     isRunning = true;
                     button.setText("프로그램 종료");
                     System.out.println("프로그램이 시작되었습니다.");
-                    
-                    try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-                    for(int line=0;line<10;line++) {
-            			try {
-    
-            				BufferedImage screenFullImage = robot.createScreenCapture(captureArea);
-            				
-            				ImageIO.write(screenFullImage, "png", new File("screenshotOrigin.png"));
-            				File input = new File("screenshotOrigin.png");
-            	            File output = new File("screenshot.png");
-            	            
-            				resizeImageByFactor(input, output, 2.0);
-            				
-            	            System.out.println("스크린샷 저장 완료!");
-
-            			} catch (Exception error) {
-            				// TODO Auto-generated catch block
-            				error.printStackTrace();
-            			}
-            	        
-            	        String typeString = process("screenshot.png");
-            	        typeString = typeString.replace('‘', '\'').replace("ﬁ", "fi").replace("ﬂ", "fl").replace("  ", " ");
-            	        if(typeString.contains("busyr")) {
-            	        	typeString = typeString.replace("busyr", "busy");
-            	        }
-            	        if(typeString.contains("};r")) {
-            	        	typeString = typeString.replace("};r", "r");
-            	        }
-            	        	
-
-            	   
-            	        if (!typeString.trim().endsWith(".")) {
-            	            // 마지막 영문자 위치 찾기 (a~z 또는 A~Z)
-            	            int lastLetterIndex = -1;
-            	            for (int i = typeString.length() - 1; i >= 0; i--) {
-            	                char c = typeString.charAt(i);
-            	                if (Character.isLetter(c) && c < 128) { // 영문자 조건
-            	                    lastLetterIndex = i;
-            	                    break;
-            	                }
-            	            }
-
-            	            // 영문자가 있을 경우에만 처리
-            	            if (lastLetterIndex != -1) {
-            	                // 마지막 영문자까지 자르고 나머지는 버림 (공백은 유지됨)
-            	                typeString = typeString.substring(0, lastLetterIndex + 1) + ".";
-            	            }
-            	        }
-            	        
-            	        
-            	        if(typeString.equals("I U.")) {
-            	        	System.out.println("타자 끝!");
-            	        	System.exit(0);
-            	        }
-            	        
-            	        System.out.println(typeString);
-            	        for (char c : typeString.toCharArray()) {
-            	        	
-            	            typeCharacter(robot, c);
-            	            try {
-								Thread.sleep(20);
-							} catch (InterruptedException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							} 
-            	        }
-            	        robot.keyPress(KeyEvent.VK_ENTER);
-                        robot.keyRelease(KeyEvent.VK_ENTER);
-                        
-            	        try {
-
-							
-            	        	while(true) {
-            	        		Thread.sleep(50);
-            	        		try {
-    	            				
-    	            				
-    	            				BufferedImage screenFullImage = robot.createScreenCapture(captureArea);
-    	            				
-    	            				ImageIO.write(screenFullImage, "png", new File("screenshotOrigin.png"));
-    	            				File input = new File("screenshotOrigin.png");
-    	            	            File output = new File("screenshot.png");
-    	            	            
-    	            				resizeImageByFactor(input, output, 2.0);
-    	            				
-    	            	            System.out.println("스크린샷2 저장 완료!");
-
-    	            			} catch (Exception error) {
-    	            				// TODO Auto-generated catch block
-    	            				error.printStackTrace();
-    	            			}
-    	            	        
-    	            	        String typeString2 = process("screenshot.png");
-    	            	        if(typeString.matches(typeString2.substring(0,2))) {
-    	            	        	robot.keyPress(KeyEvent.VK_SPACE);
-    	                            robot.keyRelease(KeyEvent.VK_SPACE);
-    	            	        }else {
-    	            	        	System.out.println("이전문장과 비교 완료!");
-    	            	        	break;
-    	            	        }
-    	            	        
-    							
-            	        	}
-            	        	Thread.sleep(500);
-							
-							
-						} catch (InterruptedException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-            		}
+                   
+                   thread.start();
                 } else {
                     // 프로그램 종료
                     isRunning = false;
                     button.setText("프로그램 시작");
                     System.out.println("프로그램이 종료되었습니다.");
+                   
                     System.exit(0);
                 }
             }
