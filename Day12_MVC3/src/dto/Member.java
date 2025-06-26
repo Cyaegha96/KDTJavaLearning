@@ -1,6 +1,7 @@
 package dto;
 
-public class Member {
+//abstract가 붙음으로서 상속을 위한 클래스가 됨
+public abstract class Member {
 	
 	static final double DOUBLE_POINT_BONUS = 0.03d;
 	
@@ -39,7 +40,5 @@ public class Member {
 		this.point = point;
 	}
 	
-	public double getBonus() {
-		return this.point * DOUBLE_POINT_BONUS;
-	}
+	abstract public double getBonus();
 }

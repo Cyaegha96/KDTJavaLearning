@@ -7,9 +7,7 @@ public class Silver extends Member{
 		super(id, name, point);
 	}
 
-	public Silver() {
-		
-	}
+	public Silver() {}
 	
 	@Override
 	public double getBonus() {

@@ -6,13 +6,9 @@ public class Gold extends Member {
 	
 	public Gold(int id, String name, double point) {
 		super(id, name, point);
-		
-		
 	}
 
-	public Gold() {
-		super();
-	}
+	public Gold() {}
 	
 	@Override
 	public double getBonus() {
