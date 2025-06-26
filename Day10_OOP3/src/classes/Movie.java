@@ -13,10 +13,7 @@ public class Movie {
 		this.title = title;
 		this.genre = genre;
 	}
-	
-	public void printMovieInfo() {
-		System.out.println(this.id+"\t"+this.title+"\t"+this.genre);
-	}
+
 	
 	
 	public int getId() {

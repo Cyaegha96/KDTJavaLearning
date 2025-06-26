@@ -8,7 +8,9 @@ public class Quiz01 {
 	
 	static Scanner sc = new Scanner(System.in);
 	
-	
+	public static void printMovieInfo(Movie movie) {
+		System.out.println(movie.getId()+"\t"+movie.getTitle()+"\t"+movie.getGenre());
+	}
 	public static int selectID(Movie[] moives,int count) {
 		
 		while(true) {
@@ -84,7 +86,7 @@ public class Quiz01 {
 					
 					System.out.println("ID\t제목\t장르\t");
 					for(int i=0;i<movieCount;i++) {
-						movies[i].printMovieInfo();
+						printMovieInfo(movies[i]);
 					}
 				}
 			
