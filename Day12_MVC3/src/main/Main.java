@@ -1,11 +1,13 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import dao.Manager;
 import dto.Gold;
 import dto.Member;
 import dto.Silver;
+import dto.Topaz;
 
 public class Main {
 
@@ -106,18 +108,16 @@ public class Main {
 		}
 	}
 
-	public static void memberPrint(Member[] members, int length) {
+	public static void memberPrint(ArrayList<Member> members, int length) {
 
 		System.out.println("회원id\t회원이름\t회원포인트\t회원보너스\t");
-		for(int i=0;i<length;i++) {
-
-			// 포맷: 아이디\t이름\t포인트(소수점2자리)\t보너스(소수점2자리)\t
+		for (Member member : members) {
 			System.out.printf("%d\t%s\t%.2f\t%.2f\t\n",
-					members[i].getId(), 
-					members[i].getName(), 
-					members[i].getPoint(), 
-					members[i].getBonus());
-		}
+					member.getId(), 
+					member.getName(), 
+					member.getPoint(), 
+					member.getBonus());
+		} 
 	}
 
 	public static void menuPrint() {
@@ -133,7 +133,7 @@ public class Main {
 	public static void initMember() {
 
 		manager.addMembers(new Silver(1001, "TOM", 1000));
-		manager.addMembers(new Silver(1002, "Jane", 2000 ));
+		manager.addMembers(new Topaz(1002, "Jane", 2000 ));
 		manager.addMembers(new Silver(1003, "Susan", 3000));
 		manager.addMembers(new Gold(1004, "Eric", 2500));
 
@@ -180,8 +180,8 @@ public class Main {
 					String searchString = inputString(SEARCH_NAME_STRING);
 
 
-					Member[] memberSilver = manager.searchByName(searchString );
-					memberPrint(memberSilver, memberSilver.length);
+					ArrayList<Member> members = manager.searchByName(searchString );
+					memberPrint(members, members.size());
 
 				}
 

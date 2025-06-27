@@ -9,14 +9,23 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import net.sourceforge.tess4j.Tesseract;
 
+
 public class AutoTajaPractice {
+
 	
+
 	private static boolean isRunning = false; // 상태 추적 변수
 	
 	public static void resizeImageByFactor(File inputFile, File outputFile, double scale) throws Exception {
@@ -170,7 +179,9 @@ private static void typeCharacter(Robot robot, char c) {
 		Rectangle captureArea = new Rectangle(640, 260, 830, 45);
 		
 		instanceTesseract.setLanguage("eng");
+		
 		instanceTesseract.setPageSegMode(7);  
+	
 		instanceTesseract.setTessVariable("preserve_interword_spaces", "1");
 		
 
@@ -230,6 +241,8 @@ private static void typeCharacter(Robot robot, char c) {
         	                    break;
         	                }
         	            }
+        	            
+        	         
 
         	            // 영문자가 있을 경우에만 처리
         	            if (lastLetterIndex != -1) {
@@ -244,12 +257,14 @@ private static void typeCharacter(Robot robot, char c) {
         	        	System.exit(0);
         	        }
         	        
+        	     
+        	        
         	        System.out.println(typeString);
         	        for (char c : typeString.toCharArray()) {
         	        	
         	            typeCharacter(robot, c);
-        	            try {
-							Thread.sleep(20);
+        	            try {//타수 속도 조절
+							Thread.sleep(130);
 						} catch (InterruptedException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -261,37 +276,7 @@ private static void typeCharacter(Robot robot, char c) {
         	        try {
 
 						
-        	        	while(true) {
-        	        		Thread.sleep(50);
-        	        		try {
-	            				
-	            				
-	            				BufferedImage screenFullImage = robot.createScreenCapture(captureArea);
-	            				
-	            				ImageIO.write(screenFullImage, "png", new File("screenshotOrigin.png"));
-	            				File input = new File("screenshotOrigin.png");
-	            	            File output = new File("screenshot.png");
-	            	            
-	            				resizeImageByFactor(input, output, 2.0);
-	            				
-	            	            System.out.println("스크린샷2 저장 완료!");
-
-	            			} catch (Exception error) {
-	            				// TODO Auto-generated catch block
-	            				error.printStackTrace();
-	            			}
-	            	        
-	            	        String typeString2 = process("screenshot.png");
-	            	        if(typeString.matches(typeString2.substring(0,2))) {
-	            	        	robot.keyPress(KeyEvent.VK_SPACE);
-	                            robot.keyRelease(KeyEvent.VK_SPACE);
-	            	        }else {
-	            	        	System.out.println("이전문장과 비교 완료!");
-	            	        	break;
-	            	        }
-	            	        
-							
-        	        	}
+        	        	
         	        	Thread.sleep(500);
 						
 						

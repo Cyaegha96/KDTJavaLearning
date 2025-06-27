@@ -64,7 +64,7 @@ public class Quiz01 {
 			int menuNum = selectNum();
 			if(menuNum == 1) {
 				//신규 영화 등록
-				if(dao.getIndex() >=5) {
+				if(dao.getMovies().size() >=5) {
 					System.out.println("더 이상 영화를 등록 할 수 없습니다.");
 				}else {
 					
@@ -85,13 +85,13 @@ public class Quiz01 {
 			}else if(menuNum == 2) {
 				//영화 목록 출력
 				
-				if(dao.getIndex() ==0) {
+				if(dao.getMovies().size() ==0) {
 					System.out.println("출력할 영화 목록이 없습니다.");
 				}else {
 					
 					System.out.println("ID\t제목\t장르\t");
-					for(int i=0;i<dao.getIndex();i++) {
-						printMovieInfo(dao.getMovie(i));
+					for(MovieDTO movie:dao.getMovies()) {
+						printMovieInfo(movie);
 					}
 				}
 			

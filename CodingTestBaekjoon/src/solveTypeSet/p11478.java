@@ -1,4 +1,4 @@
-package solveDoing;
+package solveTypeSet;
 
 
 import java.util.ArrayList;

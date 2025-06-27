@@ -1,5 +1,7 @@
 package models;
 
+import java.util.ArrayList;
+
 import classes.MovieDTO;
 
 //DAO;
@@ -10,30 +12,26 @@ import classes.MovieDTO;
 
 public class MovieDAO {
 
-	private MovieDTO[] movies = new MovieDTO[5];
-	private int index = 0;
+	private ArrayList<MovieDTO> movies = new ArrayList<>();
+
 	
 	public void addMovie(MovieDTO movie) {
-		this.movies[this.index]  = movie;
-		this.index++;
+		movies.add(movie);
 	}
 	
-	public int getIndex() {
-		return this.index;
-	}
-	
-	public MovieDTO[] getMovies() {
+
+	public ArrayList<MovieDTO> getMovies() {
 		return this.movies;
 	}
 	
 	public MovieDTO getMovie(int index) {
-		return this.movies[index];
+		return movies.get(index);
 	}
 
 	public boolean isIdExist(int id) {
 		
-		for(int i=0;i< this.index;i++) {
-			if(id == movies[i].getId()) {
+		for(int i=0;i< movies.size();i++) {
+			if(id == movies.get(i).getId()) {
 				return true;
 			}
 		}

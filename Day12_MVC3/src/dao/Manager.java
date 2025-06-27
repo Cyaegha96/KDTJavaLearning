@@ -1,27 +1,26 @@
 package dao;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import dto.Member;
 
 public class Manager {
 	
-	Member[] members = new Member[100];
-	int memberCounts = 0;
+	private ArrayList<Member> members = new ArrayList<>();
 	
 	public void addMembers(Member member) {
-		members[memberCounts] = member;
-		memberCounts++;
+		members.add(member);
 	}
 	
 	
 	public int getMemberCounts() {
-		return memberCounts;
+		return members.size();
 	}
 	
 	public int getMemberIndex(int id) {
-		for(int i=0;i<memberCounts;i++) {
-			if(members[i].getId() == id) {
+		for(int i=0;i<members.size();i++) {
+			if(members.get(i).getId() == id) {
 				return i;
 			}
 		}
@@ -29,8 +28,8 @@ public class Manager {
 	}
 	
 	public int getMemberIndex(String name) {
-		for(int i=0;i<memberCounts;i++) {
-			if(members[i].getName().equals(name)) {
+		for(int i=0;i<members.size();i++) {
+			if(members.get(i).getName().equals(name)) {
 				return i;
 			}
 		}
@@ -38,27 +37,24 @@ public class Manager {
 	}
 	
 	public void updateMember(Member member,int index) {
-		members[index] = member;
+		members.set(index, member);
 	}
 	
 	public void deleteMember(int index) {
 		
-		for(int i=index;i<memberCounts-1;i++) {
-			members[i] = members[i+1];
-		}
-		memberCounts--;
+		members.remove(index);
 		
 	}
 	
 	
-	public Member[] getMembers() {
+	public ArrayList<Member> getMembers() {
 		return members;
 	}
 	
 	public boolean isDupId(int newId) {
 
-		for(int i=0;i<memberCounts;i++) {
-			if(members[i].getId() == newId) {
+		for(int i=0;i<members.size();i++) {
+			if(members.get(i).getId() == newId) {
 				return true;
 			}
 		}
@@ -67,50 +63,23 @@ public class Manager {
 	
 	public boolean isDupName(String name) {
 
-		for(int i=0;i<memberCounts;i++) {
-			if(members[i].getName().equals(name)) {
+		for(int i=0;i<members.size();i++) {
+			if(members.get(i).getName().equals(name)) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public Member[] searchByName(String targetName) {
-		Member[] result =new Member[memberCounts ];
+	public ArrayList<Member> searchByName(String targetName) {
 		
-		int j=0;
-		for(int i=0;i<memberCounts ;i++) {
-			if(this.members[i].getName().contains(targetName)) {
-				result[j++] = members[i];
+		ArrayList<Member> newList = new ArrayList<Member>();
+		for(int i=0;i<members.size() ;i++) {
+			if(members.get(i).getName().contains(targetName)) {
+				newList.add (members.get(i));
 			}
 		}
-		return Arrays.copyOfRange(result, 0, j);
+		return newList;
 	
 	}
-	
-	
-	public Member[] getSearchByName(String str) {
-		
-		int selectedCount= 0;
-		
-		for(int i=0;i<memberCounts;i++) {
-			if(this.members[i].getName().contains(str)) {
-				selectedCount++;
-			}
-		}
-		
-		Member[] selectedMembers= new Member[selectedCount];  
-		int tempCount = 0;
-		
-		for(int i=0;i<memberCounts;i++) {
-			if(this.members[i].getName().contains(str)) {
-				selectedMembers[tempCount] = members[i];
-				tempCount++;
-			}
-		}
-		
-		return selectedMembers;
-	}
-	
-
 }

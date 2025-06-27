@@ -1,4 +1,4 @@
-package solveTypeHash;
+package solveTypeSet;
 
 import java.io.BufferedReader;
 import java.io.IOException;
