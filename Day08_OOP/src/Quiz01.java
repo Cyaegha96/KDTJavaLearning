@@ -20,12 +20,10 @@ public class Quiz01 {
 		String input = "10.5.5.7 이랑 10.5.5.5 는 화이트리스트";
 		
 		String filePath = "secret.txt";
-		try( FileWriter writer = new FileWriter(filePath)) {
-			 writer.write(input);
-			 System.out.println("파일 저장 완료: "+filePath);
-		}catch (Exception e) {
-			System.out.println("파일 저장 중 오류 발생: " + e.getMessage());
-		}
+		 FileWriter writer = new FileWriter(filePath);
+		writer.write(input);
+		System.out.println("파일 저장 완료: "+filePath);
+	
 //		
 		client.upload(new java.io.File("secret.txt"));
 		client.download("secret.txt",new File("c:/download/secret.txt"));
