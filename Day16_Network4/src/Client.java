@@ -18,11 +18,9 @@ public class Client {
 	public static void menu() {
 
 		System.out.println("<< 인증시스템 >>");
-		if(userName == null) {
-			System.out.println(" 1. 로그인 ");
-		}else {
-			System.out.println(" 1. 로그아웃");
-		}
+
+		System.out.println(" 1. 로그인 ");
+		
 		System.out.println(" 2. 회원가입 ");
 		System.out.println(" 0. 종료");
 

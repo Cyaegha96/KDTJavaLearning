@@ -10,26 +10,52 @@ import java.net.UnknownHostException;
 import javax.swing.JOptionPane;
 public class Client {
 	public static void main(String[] args) throws UnknownHostException, IOException {
-		Socket socket = new Socket("10.5.5.5", 7028);
 
+		Socket socket = new Socket("10.5.5.8", 5000);
+//		Socket socket = new Socket("10.5.5.5", 7028);
 		InputStream iStream = socket.getInputStream();
 		DataInputStream dis = new DataInputStream(iStream);
 		
 		
 		OutputStream os= socket.getOutputStream(); //기본 스트림 개설
-		//기본 스트림은 데이터 통신에 불편함이 많음.
 		DataOutputStream dos = new DataOutputStream(os);
-		while(true) {
-			String msg = dis.readUTF();
-			System.out.println("서버가 보낸 메시지:" +msg );
+		
+			new Thread(()->{
+				while(true) {
+					String msg="";
+					try {
+						msg = dis.readUTF();
+					} catch (IOException e) {
+						System.out.println("dis오류");
+						System.exit(0);
+					}
+					System.out.println("서버가 보낸 메시지:" +msg );
+				}
+				
+				
+			}).start();
 			
-			String message	= JOptionPane.showInputDialog("클라이언트에게 보낼 메시지 입력");
+			new Thread(()->{
+				while(true) {
+					String message	= JOptionPane.showInputDialog("클라이언트에게 보낼 메시지 입력");
+					System.out.println("서버에게:"+message);
 
-
-			dos.writeUTF(message);
-			dos.flush();
+					try {
+						dos.writeUTF(message);
+					} catch (IOException e) {
+						System.out.println("dos오류");
+						System.exit(0);
+					}
+					try {
+						dos.flush();
+					} catch (IOException e) {
+						System.out.println("dos오류");
+						System.exit(0);
+					}
+				}
+			}).start();
 			
 		}
 		
-	}
+	
 }

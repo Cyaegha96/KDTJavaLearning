@@ -3,6 +3,7 @@ package solveTypeBasic;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class p5073 {
@@ -22,14 +23,16 @@ public class p5073 {
 			if(sum == 0) {
 				break;
 			}
-			if(arr[0] == arr[1] && arr[1] == arr[2] && arr[0] ==arr[2]) {
+			Arrays.sort(arr);
+			if(arr[0] + arr[1] <= arr[2]) {
+				System.out.println("Invalid");
+			}
+			else if(arr[0] == arr[1] && arr[1] == arr[2] && arr[0] ==arr[2]) {
 				System.out.println("Equilateral");
 			}else if((arr[0] == arr[1])&&(arr[1] != arr[2]) || (arr[1] == arr[2])&& (arr[2] != arr[0]) || (arr[0] ==arr[2])&&(arr[0] != arr[1])) {
 				System.out.println("Isosceles");
 			}else if(arr[0] != arr[1] && arr[1] != arr[2] && arr[0] !=arr[2]) {
 				System.out.println("Scalene");
-			}else {
-				System.out.println("Invalid");
 			}
 			
 			

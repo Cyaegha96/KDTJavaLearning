@@ -5,11 +5,12 @@ import java.util.List;
 
 import dto.MemberDTO;
 
-public class MembersDAO {
-	List<MemberDTO> members = new ArrayList<>();
-
-	public void addMembers(String id, String password, String name) {
-		members.add(new MemberDTO(id, password, name));
+public class MemberDAO {
+	
+	List<MemberDTO> members = new ArrayList<MemberDTO>();
+	
+	public void addMembers(String id, String password) {
+		members.add(new MemberDTO(id, password));
 	}
 	
 	public MemberDTO searchById(String id) {
@@ -32,7 +33,5 @@ public class MembersDAO {
 	public int Size() {
 		return members.size();
 	}
-	
-	
 
 }
