@@ -9,11 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -264,7 +260,7 @@ private static void typeCharacter(Robot robot, char c) {
         	        	
         	            typeCharacter(robot, c);
         	            try {//타수 속도 조절
-							Thread.sleep(60);
+							Thread.sleep(120);
 						} catch (InterruptedException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
