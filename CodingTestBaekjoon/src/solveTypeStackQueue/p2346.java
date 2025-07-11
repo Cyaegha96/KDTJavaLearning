@@ -1,4 +1,4 @@
-package solveDoing;
+package solveTypeStackQueue;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,59 +8,61 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 //«≥º± ≈Õ∆Æ∏Æ±‚
-
-
-class IntPair{
+class Ballon{
 	int index;
-	int data;
+	int next;
 	
-	public IntPair(int first, int second) {
-		index = first;
-		data = second;
+	public Ballon(int index, int next) {
+		this.index = index;
+		this.next= next;
 	}
 	
 }
 
+
 public class p2346 {
+	
+	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int n = Integer.parseInt(br.readLine());
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		StringBuilder builder = new StringBuilder();
-		List<IntPair> list = new ArrayList<>();
+		List<Ballon> list = new ArrayList<Ballon>();
 		
 		for(int i=1;i<=n;i++) {
 			int tmp = Integer.parseInt(st.nextToken());
-			list.add(new IntPair(i, tmp));
+			list.add(new Ballon(i, tmp));
 		}
-		int index = 0;
-		int checked = 0;
 		
+		int index =0;
 		while(!list.isEmpty()) {
 			
-			//«ÿ¥Á ¿Œµ¶Ω∫ √ﬂ∞°
-			builder.append(list.get(index).index);
+			//ª´¥Ÿ¿Ω ∫Ù¥ıø° √ﬂ∞°
+			Ballon ballon = list.get(index);
+			builder.append(ballon.index+" ");
 			
-			int buffer = list.get(index).data;
 			
-			if(!list.isEmpty()) {
-				list.remove(index);
-				builder.append(", ");
-				index = index + buffer;
-				if(index < 0) {
-					index = (index + list.size())%list.size();
-				}else {
-					if(!list.isEmpty()) {
-						index %= list.size();
-					}
-				}
+			
+			int move = ballon.next;
+			
+			list.remove(index);
+			
+			if(list.isEmpty()) break;
+
+			if(ballon.next > 0) {
+				index = (index + ballon.next -1) % list.size();
 			}
+			else{
+				index  = (index + ballon.next) % list.size();
+				if(index < 0) index += list.size();
+			}
+			
 		
 		}
+		
 		System.out.println(builder);
-		
-		
-		
+
 		
 	}
 }

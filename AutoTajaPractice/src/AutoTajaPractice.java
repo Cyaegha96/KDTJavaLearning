@@ -260,7 +260,7 @@ private static void typeCharacter(Robot robot, char c) {
         	        	
         	            typeCharacter(robot, c);
         	            try {//타수 속도 조절
-							Thread.sleep(120);
+							Thread.sleep(20);
 						} catch (InterruptedException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
